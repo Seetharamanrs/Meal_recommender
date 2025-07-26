@@ -8,10 +8,10 @@ from langchain_experimental.agents import create_pandas_dataframe_agent
 # from langchain.agents import create_pandas_dataframe_agent
 from langchain_community.llms import Ollama
 
-# Title
+
 st.title("Indian Meal Recommender (30–60 mins) 🍛")
 
-# Step 1: Scrape recipe data
+
 @st.cache_data
 def scrape_recipes():
     url = "https://www.harighotra.co.uk/indian-recipes/time/indian-recipes-in-30-60-minutes/view-all"
@@ -29,6 +29,7 @@ def scrape_recipes():
             recipe.append([name, time])
     return recipe
 
+
 def time_min(time_str):
     time_str = str(time_str).lower().strip()
     minutes = 0
@@ -42,7 +43,7 @@ def time_min(time_str):
             minutes += int(min_part)
     return minutes
 
-# Step 2: Load into DataFrame
+
 recipes = scrape_recipes()
 df = pd.DataFrame(recipes, columns=["Dish", "Time"])
 df["Time (mins)"] = df["Time"].apply(time_min)
@@ -50,16 +51,16 @@ st.sidebar.header("Filter Recipes by Time ⏱️")
 min_time = st.sidebar.slider("Minimum time (minutes)", 0, 120, 0, 5)
 max_time = st.sidebar.slider("Maximum time (minutes)", 10, 120, 60, 5)
 
-# Filter the DataFrame
+
 filtered_df = df[(df["Time (mins)"] >= min_time) & (df["Time (mins)"] <= max_time)]
 
-# Show filtered data
+
 st.subheader("Filtered Recipes")
 st.dataframe(filtered_df)
-# Show data
 
 
-# Step 3: LangChain - Generate 3 meals
+
+
 if st.button("Generate Meal Plan 🍽️"):
     if filtered_df.empty:
         st.warning("No recipes found in that time range.")
