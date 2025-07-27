@@ -71,7 +71,7 @@ if st.button("Generate Meal Plan 🍽️"):
                 agent = create_pandas_dataframe_agent(llm, filtered_df, allow_dangerous_code=True, verbose=True)
 
                 query = """
-                Pick 3 different meals for today: one breakfast, one lunch, one dinner.
+                Pick 3 different meals for 3 days: one breakfast, one lunch, one dinner.
                 Choose randomly and return them in a table with Meal, Dish Name, and Time (mins).
                 """
                 result = agent.run(query)
