@@ -9,7 +9,7 @@ from langchain_experimental.agents import create_pandas_dataframe_agent
 from langchain_community.llms import Ollama
 
 
-st.title("Indian Meal Recommender (30–60 mins) 🍛")
+st.title("Indian Meal Recommender (30–60 mins) ")
 
 
 @st.cache_data
