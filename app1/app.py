@@ -61,7 +61,7 @@ st.dataframe(filtered_df)
 
 
 
-if st.button("Generate Meal Plan 🍽️"):
+if st.button("Generate Meal Plan "):
     if filtered_df.empty:
         st.warning("No recipes found in that time range.")
     else:
