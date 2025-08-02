@@ -9,7 +9,7 @@ from langchain_experimental.agents import create_pandas_dataframe_agent
 from langchain_community.llms import Ollama
 
 
-st.title("Indian Meal Recommender (30–60 mins) ")
+st.title("Meal Recommender (30–60 mins) ")
 
 
 @st.cache_data
@@ -47,7 +47,7 @@ def time_min(time_str):
 recipes = scrape_recipes()
 df = pd.DataFrame(recipes, columns=["Dish", "Time"])
 df["Time (mins)"] = df["Time"].apply(time_min)
-st.sidebar.header("Filter Recipes by Time ⏱️")
+st.sidebar.header("Filter Recipes by Time ")
 min_time = st.sidebar.slider("Minimum time (minutes)", 0, 120, 0, 5)
 max_time = st.sidebar.slider("Maximum time (minutes)", 10, 120, 60, 5)
 
@@ -67,15 +67,19 @@ if st.button("Generate Meal Plan "):
     else:
         with st.spinner("Asking the LLM for today's meals..."):
             try:
-                llm = Ollama(model='gemma3')
-                agent = create_pandas_dataframe_agent(llm, filtered_df, allow_dangerous_code=True, verbose=True)
+                llm = Ollama(model='gemma3:12b')
+                agent = create_pandas_dataframe_agent(llm, filtered_df, allow_dangerous_code=True, verbose=True,handle_parsing_errors=True)
 
                 query = """
-                Pick 3 different meals for 3 days: one breakfast, one lunch, one dinner.
-                Choose randomly and return them in a table with Meal, Dish Name, and Time (mins).
+                From the available recipes, select three distinct dishes suitable for a meal plan: one for breakfast, one for lunch, and one for dinner. 
+                Pick randomly. Output a Markdown table with columns: Meal | Dish Name | Time (mins).
                 """
                 result = agent.run(query)
                 st.success("Here’s your meal plan!")
                 st.markdown(result)
             except Exception as e:
-                st.error(f"Error: {e}")
+                st.error("LLM failed. Generating fallback plan.")
+                fallback_meals = ["Breakfast", "Lunch", "Dinner"]
+                sampled = filtered_df.sample(n=3)
+                sampled["Meal"] = fallback_meals
+                st.dataframe(sampled[["Meal", "Dish", "Time (mins)"]])
