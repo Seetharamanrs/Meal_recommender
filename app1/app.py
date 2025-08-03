@@ -78,7 +78,7 @@ if st.button("Generate Meal Plan "):
                 st.success("Here’s your meal plan!")
                 st.markdown(result)
             except Exception as e:
-                st.error("LLM failed. Generating fallback plan.")
+                # st.error("LLM failed. Generating fallback plan.")
                 fallback_meals = ["Breakfast", "Lunch", "Dinner"]
                 sampled = filtered_df.sample(n=3)
                 sampled["Meal"] = fallback_meals
