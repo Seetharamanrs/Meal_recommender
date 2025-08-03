@@ -68,7 +68,7 @@ if st.button("Generate Meal Plan "):
         with st.spinner("Asking the LLM for today's meals..."):
             try:
                 llm = Ollama(model='gemma3:12b')
-                agent = create_pandas_dataframe_agent(llm, filtered_df, allow_dangerous_code=True, verbose=True,handle_parsing_errors=True)
+                agent = create_pandas_dataframe_agent(llm, filtered_df, allow_dangerous_code=True, verbose=True)
 
                 query = """
                 From the available recipes, select three distinct dishes suitable for a meal plan: one for breakfast, one for lunch, and one for dinner. 
